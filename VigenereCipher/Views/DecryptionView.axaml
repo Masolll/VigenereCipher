@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VigenereCipher.Views.DecryptionView"
+		xmlns:vm="using:VigenereCipher.ViewModels"
+		x:DataType="vm:DecryptionViewModel">
+
+	<Border Padding="10">
+
+		<Grid ColumnDefinitions="*, Auto, *">
+			<Grid Grid.Column="0" RowDefinitions="Auto, *" RowSpacing="10">
+				<Border CornerRadius="5" Padding="20,5,20,5" HorizontalAlignment="Center" Grid.Row="0" BorderBrush="Gray" BorderThickness="2">
+					<TextBlock >Зашифрованный текст</TextBlock>
+				</Border>
+				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
+					<Grid RowDefinitions="*, Auto" RowSpacing="5">
+						<TextBox Text="{Binding Cipher}" Background="White" PlaceholderText="Введите зашифрованный текст" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+						<Button Command="{Binding RunDecryptCommand}" Grid.Row="1" HorizontalAlignment="Right" Background="#FFC7C2" BorderBrush="#FF1500" BorderThickness="2" Grid.Column="1">Расшифровать</Button>
+					</Grid>
+				</Border>
+			</Grid>
+
+			<Button Command="{Binding SwapToEncryptionCommand}" FontSize="30" Margin="10,0,10,0" Padding="5,0,5,0" Background="#FFE0C2" BorderBrush="#FF932A" BorderThickness="2" Grid.Column="1" Content="⇆" VerticalAlignment="Center"></Button>
+
+			<Grid Grid.Column="2" RowDefinitions="Auto, *" RowSpacing="10">
+				<Border CornerRadius="5" Padding="20,5,20,5" HorizontalAlignment="Center" Grid.Row="0" BorderBrush="Gray" BorderThickness="2">
+					<TextBlock >Исходный текст</TextBlock>
+				</Border>
+				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
+					<Grid RowDefinitions="*, Auto" RowSpacing="5">
+						<TextBox Text="{Binding Message}" PlaceholderText="Здесь будет исходный текст" IsEnabled="False" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+						<Grid Grid.Row="1" ColumnDefinitions="Auto, *" ColumnSpacing="5">
+							<Border CornerRadius="5" Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Padding="5">
+								<TextBlock VerticalAlignment="Center">Исходный ключ:</TextBlock>
+							</Border>
+							<TextBox Text="{Binding Key}" Background="White" BorderBrush="Gray" IsEnabled="False" Grid.Column="1" BorderThickness="2"></TextBox>
+						</Grid>
+					</Grid>
+				</Border>
+			</Grid>
+		</Grid>
+	</Border>
+	
+</UserControl>

@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VigenereCipher.Views.EncryptionView"
+		xmlns:vm="using:VigenereCipher.ViewModels"
+		x:DataType="vm:EncryptionViewModel">
+	
+	<Border Padding="10">
+		
+		<Grid ColumnDefinitions="*, Auto, *">
+			<Grid Grid.Column="0" RowDefinitions="Auto, *" RowSpacing="10">
+				<Border CornerRadius="5" Padding="20,5,20,5" HorizontalAlignment="Center" Grid.Row="0" BorderBrush="Gray" BorderThickness="2">
+					<TextBlock >Исходный текст</TextBlock>
+				</Border>
+				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
+					<Grid RowDefinitions="*, Auto" RowSpacing="5">
+						<TextBox Text="{Binding Message}" PlaceholderText="Введите исходный текст" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+						<Grid Grid.Row="1" ColumnDefinitions="*, Auto" ColumnSpacing="5">
+							<TextBox Text="{Binding Key}" BorderBrush="Gray" PlaceholderText="Введите ключ" Grid.Column="0" BorderThickness="2"></TextBox>
+							<Button Command="{Binding RunEncryptCommand}" Background="#C2E5FF" BorderBrush="#0092FF" BorderThickness="2" Grid.Column="1">
+								Зашифровать
+							</Button>
+						</Grid>
+					</Grid>
+				</Border>
+			</Grid>
+			
+			<Button Command="{Binding SwapToDecryptionCommand}" FontSize="30" Margin="10,0,10,0" Padding="5,0,5,0" Background="#FFE0C2" BorderBrush="#FF932A" BorderThickness="2" Grid.Column="1" Content="⇆" VerticalAlignment="Center"></Button>
+			
+			<Grid Grid.Column="2" RowDefinitions="Auto, *" RowSpacing="10">
+				<Border CornerRadius="5" Padding="20,5,20,5" HorizontalAlignment="Center" Grid.Row="0" BorderBrush="Gray" BorderThickness="2">
+					<TextBlock >Зашифрованный текст</TextBlock>
+				</Border>
+				<Border CornerRadius="5" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Padding="10">
+					<TextBox Text="{Binding Cipher}" IsEnabled="False" PlaceholderText="Здесь будет зашифрованный текст" BorderBrush="Gray" BorderThickness="2"></TextBox>
+				</Border>
+			</Grid>
+		</Grid>
+	</Border>
+	
+</UserControl>
