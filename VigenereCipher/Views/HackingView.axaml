@@ -3,9 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="VigenereCipher.Views.DecryptionView"
+        x:Class="VigenereCipher.Views.HackingView"
 		xmlns:vm="using:VigenereCipher.ViewModels"
-		x:DataType="vm:DecryptionViewModel">
+		x:DataType="vm:HackingViewModel">
 
 	<Border Padding="10">
 
@@ -17,18 +17,15 @@
 				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
 					<Grid RowDefinitions="Auto, *, Auto" RowSpacing="10">
 						<UniformGrid Columns="2" ColumnSpacing="10">
-							<Button Background="#FFE0C2" BorderBrush="#FF932A" BorderThickness="2" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<Button Command="{Binding ActivateDecryptionMode}" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 								Расшифровка
 							</Button>
-							<Button Command="{Binding ActivateHackingMode}" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<Button Background="#FFE0C2" BorderBrush="#FF932A" BorderThickness="2" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 								Взлом
 							</Button>
 						</UniformGrid>
 						<TextBox Text="{Binding Cipher}" Background="White" PlaceholderText="Введите зашифрованный текст" Grid.Row="1" BorderBrush="Gray" BorderThickness="2"></TextBox>
-						<Grid Grid.Row="2" ColumnDefinitions="*, Auto" ColumnSpacing="10">
-							<TextBox BorderBrush="Gray" BorderThickness="2" PlaceholderText="Введите ключ"/>
-							<Button Command="{Binding RunDecryptCommand}" HorizontalAlignment="Right" Background="#C2E5FF" BorderBrush="#0092FF" BorderThickness="2" Grid.Column="1">Расшифровать</Button>
-						</Grid>
+						<Button Grid.Row="2" Command="{Binding RunHackingCommand}" HorizontalAlignment="Right" Background="#C2E5FF" BorderBrush="#0092FF" BorderThickness="2" Grid.Column="1">Взломать</Button>
 					</Grid>
 				</Border>
 			</Grid>
@@ -40,10 +37,18 @@
 					<TextBlock >Исходный текст</TextBlock>
 				</Border>
 				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
-					<TextBox Text="{Binding Message}" PlaceholderText="Здесь будет исходный текст" IsEnabled="False" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+					<Grid RowDefinitions="*, Auto" RowSpacing="10">
+						<TextBox Text="{Binding Message}" PlaceholderText="Здесь будет исходный текст" IsEnabled="False" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+						<Grid Grid.Row="1" ColumnDefinitions="Auto, *" ColumnSpacing="5">
+							<Border CornerRadius="5" Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Padding="5">
+								<TextBlock VerticalAlignment="Center">Исходный ключ:</TextBlock>
+							</Border>
+							<TextBox Text="{Binding Key}" Background="White" BorderBrush="Gray" IsEnabled="False" Grid.Column="1" BorderThickness="2"></TextBox>
+						</Grid>
+					</Grid>
 				</Border>
 			</Grid>
 		</Grid>
 	</Border>
-	
+
 </UserControl>

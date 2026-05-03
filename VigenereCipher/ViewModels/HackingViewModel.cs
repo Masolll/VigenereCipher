@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using VigenereCipher.Service;
 
 namespace VigenereCipher.ViewModels
 {
-    public class DecryptionViewModel : ViewModelBase
+    public class HackingViewModel : ViewModelBase
     {
         private ICipherService _cipherService;
         private string _message;
@@ -33,8 +34,7 @@ namespace VigenereCipher.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public string Cipher 
+        public string Cipher
         {
             get => _cipher;
             set
@@ -43,22 +43,23 @@ namespace VigenereCipher.ViewModels
                 OnPropertyChanged();
             }
         }
-        public RelayCommand SwapToEncryptionCommand { get; init; }
-        public RelayCommand ActivateHackingMode { get; init; }
-        public RelayCommand RunDecryptCommand { get; init; }
 
-        public DecryptionViewModel(Action swapToEncryption, Action activateHackingMode)
+        public RelayCommand SwapToEncryptionCommand { get; init; }
+        public RelayCommand ActivateDecryptionMode { get; init; }
+        public RelayCommand RunHackingCommand { get; init; }
+        public HackingViewModel(Action swapToEncryption, Action activateDecryptionMode)
         {
             _cipherService = new CipherService();
             SwapToEncryptionCommand = new RelayCommand(swapToEncryption);
-            ActivateHackingMode = new RelayCommand(activateHackingMode);
-            RunDecryptCommand = new RelayCommand(runDecrypt);
+            ActivateDecryptionMode = new RelayCommand(activateDecryptionMode);
+            RunHackingCommand = new RelayCommand(runHacking);
         }
 
-        private void runDecrypt()
+        private void runHacking()
         {
-            var decryption = _cipherService.Decrypt(_cipher, _key);
-            Message = decryption;
+            var hackData = _cipherService.Hack(_cipher);
+            Message = hackData.message;
+            Key = hackData.key;
         }
     }
 }

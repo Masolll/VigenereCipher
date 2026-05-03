@@ -30,9 +30,14 @@ namespace VigenereCipher.Service
             return cipher.ToString();
         }
 
-        public (string message, string key) Decrypt(string cipher)
+        public string Decrypt(string cipher, string key)
         {
-            return ("decryption", "some key");
+            return "decryption message";
+        }
+
+        public (string message, string key) Hack(string cipher)
+        {
+            return ("hack message", "hack key");
         }
 
         private string prepareTextBeforeEncrypt(string message)
