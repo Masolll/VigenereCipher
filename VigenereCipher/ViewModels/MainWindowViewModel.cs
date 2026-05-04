@@ -1,8 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
-using VigenereCipher.Views;
-
-namespace VigenereCipher.ViewModels
+﻿namespace VigenereCipher.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
