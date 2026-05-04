@@ -26,7 +26,7 @@
 						</UniformGrid>
 						<TextBox Text="{Binding Cipher}" Background="White" PlaceholderText="Введите зашифрованный текст" Grid.Row="1" BorderBrush="Gray" BorderThickness="2"></TextBox>
 						<Grid Grid.Row="2" ColumnDefinitions="*, Auto" ColumnSpacing="10">
-							<TextBox BorderBrush="Gray" BorderThickness="2" PlaceholderText="Введите ключ"/>
+							<TextBox Text="{Binding Key}" BorderBrush="Gray" BorderThickness="2" PlaceholderText="Введите ключ"/>
 							<Button Command="{Binding RunDecryptCommand}" HorizontalAlignment="Right" Background="#C2E5FF" BorderBrush="#0092FF" BorderThickness="2" Grid.Column="1">Расшифровать</Button>
 						</Grid>
 					</Grid>
@@ -40,7 +40,7 @@
 					<TextBlock >Исходный текст</TextBlock>
 				</Border>
 				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
-					<TextBox Text="{Binding Message}" PlaceholderText="Здесь будет исходный текст" IsEnabled="False" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+					<TextBox Text="{Binding Message}" PlaceholderText="Здесь будет исходный текст" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
 				</Border>
 			</Grid>
 		</Grid>
