@@ -6,7 +6,7 @@ namespace VigenereCipher.ViewModels
 {
     public class HackingViewModel : ViewModelBase
     {
-        private ICipherService _cipherService;
+        private IKasiskiService _kasiskiService;
         private string _message;
         private string _key;
         private string _cipher;
@@ -44,7 +44,7 @@ namespace VigenereCipher.ViewModels
         public RelayCommand RunHackingCommand { get; init; }
         public HackingViewModel(Action swapToEncryption, Action activateDecryptionMode)
         {
-            _cipherService = new CipherService();
+            _kasiskiService = new KasiskiService();
             SwapToEncryptionCommand = new RelayCommand(swapToEncryption);
             ActivateDecryptionMode = new RelayCommand(activateDecryptionMode);
             RunHackingCommand = new RelayCommand(runHacking);
@@ -52,7 +52,7 @@ namespace VigenereCipher.ViewModels
 
         private void runHacking()
         {
-            var hackData = _cipherService.Hack(_cipher);
+            var hackData = _kasiskiService.Hack(_cipher);
             Message = hackData.message;
             Key = hackData.key;
         }
