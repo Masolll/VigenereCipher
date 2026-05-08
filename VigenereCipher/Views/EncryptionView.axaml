@@ -16,9 +16,9 @@
 				</Border>
 				<Border CornerRadius="5" Padding="10" Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
 					<Grid RowDefinitions="*, Auto" RowSpacing="10">
-						<TextBox Text="{Binding Message}" PlaceholderText="Введите исходный текст" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
+						<TextBox Text="{Binding Message}" TextWrapping="Wrap" PlaceholderText="Введите исходный текст" Grid.Row="0" BorderBrush="Gray" BorderThickness="2"></TextBox>
 						<Grid Grid.Row="1" ColumnDefinitions="*, Auto" ColumnSpacing="10">
-							<TextBox Text="{Binding Key}" BorderBrush="Gray" PlaceholderText="Введите ключ" Grid.Column="0" BorderThickness="2"></TextBox>
+							<TextBox Text="{Binding Key}" TextWrapping="Wrap" BorderBrush="Gray" PlaceholderText="Введите ключ" Grid.Column="0" BorderThickness="2"></TextBox>
 							<Button Command="{Binding RunEncryptCommand}" Background="#C2E5FF" BorderBrush="#0092FF" BorderThickness="2" Grid.Column="1">
 								Зашифровать
 							</Button>
@@ -34,7 +34,7 @@
 					<TextBlock >Зашифрованный текст</TextBlock>
 				</Border>
 				<Border CornerRadius="5" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Padding="10">
-					<TextBox Text="{Binding Cipher}" PlaceholderText="Здесь будет зашифрованный текст" BorderBrush="Gray" BorderThickness="2"></TextBox>
+					<TextBox Text="{Binding Cipher}" TextWrapping="Wrap" PlaceholderText="Здесь будет зашифрованный текст" BorderBrush="Gray" BorderThickness="2"></TextBox>
 				</Border>
 			</Grid>
 		</Grid>

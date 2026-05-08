@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Controls.Platform;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,26 +13,32 @@ namespace VigenereCipher.Service
         {
             var keyLength = getKeyLength(cipher);
             
-            return (message: "hack message", key: "hack key");
+            return (message: "hack message", key: $"{keyLength}");
         }
 
         private int getKeyLength(string cipher)
         {
-            var allNGramms = getAllNGramms(cipher, 5, 2);
-            var allNGrammsDistances = getNGrammsDistances(allNGramms);
-            return 0;
-        }
-
-        //нахожу все N-граммы от максимального N до минимального N
-        private Dictionary<string, List<int>> getAllNGramms(string text, int maxN, int minN)
-        {
-            var allNGramms = new Dictionary<string, List<int>>();
-            for (var n = maxN; n >= minN; n--)
+            var nGramms = getNGramms(cipher, 10, 3);
+            var nGrammsDistances = getNGrammsDistances(nGramms);
+            var distances = nGrammsDistances.SelectMany(e => e.Value).ToList();
+            var divisors = distances.Select(e => getDivisors(e)).SelectMany(e => e).ToList();
+            //словарь<делитель, частота>
+            var divisorsAndFrequence = new Dictionary<int, int>();
+            foreach(var e in divisors)
             {
-                var currentNGramms = getNGramms(text, n);
-                allNGramms = allNGramms.Union(currentNGramms).ToDictionary();
+                divisorsAndFrequence[e] = divisorsAndFrequence.GetValueOrDefault(e) + 1;
             }
-            return allNGramms;
+
+            var mostPopularDivisors = divisorsAndFrequence.OrderByDescending(e => e.Value).ThenByDescending(e => e.Key).ToList();
+            var likelyKeyLength = mostPopularDivisors.First().Key;
+            foreach(var e in mostPopularDivisors)
+            {
+                //Если частота с которой встречается делитель близка к максимальной (более 80% от максимальной частоты)
+                //то рассматриваю такой делитель как потенциально возможный. Среди таких делителей нахожу максимальный.
+                if (e.Value >= mostPopularDivisors.First().Value * 0.8 && e.Key > likelyKeyLength)
+                    likelyKeyLength = e.Key;
+            }
+            return likelyKeyLength;
         }
 
         private Dictionary<string, List<int>> getNGrammsDistances(Dictionary<string, List<int>> nGramms)
@@ -60,6 +67,18 @@ namespace VigenereCipher.Service
             return nGrammsDistances;
         }
 
+        //нахожу все N-граммы от максимального N до минимального N
+        private Dictionary<string, List<int>> getNGramms(string text, int maxN, int minN)
+        {
+            var allNGramms = new Dictionary<string, List<int>>();
+            for (var n = maxN; n >= minN; n--)
+            {
+                var currentNGramms = getNGramms(text, n);
+                allNGramms = allNGramms.Union(currentNGramms).ToDictionary();
+            }
+            return allNGramms;
+        }
+
         private Dictionary<string, List<int>> getNGramms(string text, int n)
         {
             var nGramms = new Dictionary<string, List<int>>();
@@ -80,7 +99,7 @@ namespace VigenereCipher.Service
         private List<int> getDivisors(int number)
         {
             var divisors = new List<int>();
-            for (var divisor = 1; divisor * divisor <= number; divisor++)
+            for (var divisor = 2; divisor * divisor <= number; divisor++)
             {
                 if (number % divisor == 0)
                 {
