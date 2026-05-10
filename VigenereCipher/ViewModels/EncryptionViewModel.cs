@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System;
-using VigenereCipher.Service;
+using VigenereCipher.Interfaces.Services;
+using VigenereCipher.Services;
 
 namespace VigenereCipher.ViewModels
 {

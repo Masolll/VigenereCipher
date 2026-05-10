@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using VigenereCipher.Interfaces.Services;
 using VigenereCipher.Models;
 
-namespace VigenereCipher.Service
+namespace VigenereCipher.Services
 {
     internal class CipherService : ICipherService
     {

@@ -1,4 +1,4 @@
-﻿namespace VigenereCipher.Service
+﻿namespace VigenereCipher.Interfaces.Services
 {
     internal interface ICipherService
     {

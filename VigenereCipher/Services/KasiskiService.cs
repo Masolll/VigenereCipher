@@ -1,18 +1,30 @@
-﻿using Avalonia.Controls.Platform;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VigenereCipher.Interfaces.Services;
 
-namespace VigenereCipher.Service
+namespace VigenereCipher.Services
 {
     internal class KasiskiService : IKasiskiService
     {
+        private readonly ICaesarService _caesarService = new CaesarService();
         public (string message, string key) Hack(string cipher)
         {
             var keyLength = getKeyLength(cipher);
-            
+            var groupsByKeyLenght = new List<char>[keyLength];
+            var frequencyCharsInGroups = new Dictionary<char, int>[keyLength];
+
+            for (var i = 0; i < keyLength; i++)
+            {
+                groupsByKeyLenght[i] = new List<char>();
+                frequencyCharsInGroups[i] = new Dictionary<char, int>();
+            }
+
+            for (var i = 0; i < cipher.Length; i++)
+            {
+                groupsByKeyLenght[i % keyLength].Add(cipher[i]);
+                frequencyCharsInGroups[i % keyLength][cipher[i]] = frequencyCharsInGroups[i % keyLength].GetValueOrDefault(cipher[i]) + 1;
+            }
+
             return (message: "hack message", key: $"{keyLength}");
         }
 
