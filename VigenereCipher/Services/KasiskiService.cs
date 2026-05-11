@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
 using VigenereCipher.Interfaces.Services;
 
 namespace VigenereCipher.Services
@@ -7,25 +9,43 @@ namespace VigenereCipher.Services
     internal class KasiskiService : IKasiskiService
     {
         private readonly ICaesarService _caesarService = new CaesarService();
+        private readonly string _alphabet = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+
         public (string message, string key) Hack(string cipher)
         {
+            cipher = cipher.ToLower();
             var keyLength = getKeyLength(cipher);
-            var groupsByKeyLenght = new List<char>[keyLength];
-            var frequencyCharsInGroups = new Dictionary<char, int>[keyLength];
+            var encryptedGroupsByKeyLength = new StringBuilder[keyLength];
+            var decryptedGroupsByKeyLength = new string[keyLength];
+            var keyString = new StringBuilder(keyLength);
+            var message = new StringBuilder();
 
-            for (var i = 0; i < keyLength; i++)
-            {
-                groupsByKeyLenght[i] = new List<char>();
-                frequencyCharsInGroups[i] = new Dictionary<char, int>();
-            }
-
+            //Формирую зашифрованные группы
             for (var i = 0; i < cipher.Length; i++)
             {
-                groupsByKeyLenght[i % keyLength].Add(cipher[i]);
-                frequencyCharsInGroups[i % keyLength][cipher[i]] = frequencyCharsInGroups[i % keyLength].GetValueOrDefault(cipher[i]) + 1;
+                if (encryptedGroupsByKeyLength[i % keyLength] == null)
+                    encryptedGroupsByKeyLength[i] = new StringBuilder();
+
+                encryptedGroupsByKeyLength[i % keyLength].Append(cipher[i]);
+            }
+            //Расшифровываю каждую группу и нахожу ключ
+            for (var i = 0; i < keyLength; i++)
+            {
+                var hackData = _caesarService.Hack(encryptedGroupsByKeyLength[i].ToString());
+                decryptedGroupsByKeyLength[i] = hackData.message;
+                //Сдвиг для текущей группы равен индексу буквы ключа в алфавите
+                keyString.Append(_alphabet[hackData.shift]);
+            }
+            //Формирую общее расшифрованное сообщение из всех расшифрованных групп
+            for (var i = 0; i < cipher.Length; i++)
+            {
+                var groupIndex = i % keyLength;
+                var itemIndexInGroup = i / keyLength;
+                var messageChar = decryptedGroupsByKeyLength[groupIndex][itemIndexInGroup];
+                message.Append(messageChar);
             }
 
-            return (message: "hack message", key: $"{keyLength}");
+            return (message: message.ToString(), key: keyString.ToString());
         }
 
         private int getKeyLength(string cipher)
@@ -45,7 +65,7 @@ namespace VigenereCipher.Services
             var likelyKeyLength = mostPopularDivisors.First().Key;
             foreach(var e in mostPopularDivisors)
             {
-                //Если частота с которой встречается делитель близка к максимальной (более 80% от максимальной частоты)
+                //Если частота с которой встречается делитель близка к максимальной (не менее 80% от максимальной частоты)
                 //то рассматриваю такой делитель как потенциально возможный. Среди таких делителей нахожу максимальный.
                 if (e.Value >= mostPopularDivisors.First().Value * 0.8 && e.Key > likelyKeyLength)
                     likelyKeyLength = e.Key;

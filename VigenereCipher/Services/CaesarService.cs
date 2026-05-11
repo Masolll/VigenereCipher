@@ -46,9 +46,9 @@ namespace VigenereCipher.Services
         };
 
 
-        public string Hack(string cipher) => leastSquaresMethod(cipher);
+        public (string message, int shift) Hack(string cipher) => leastSquaresMethod(cipher);
 
-        private string leastSquaresMethod(string cipher)
+        private (string message, int shift) leastSquaresMethod(string cipher)
         {
             var minSumSquares = double.MaxValue;
             var resultShift = 0;
@@ -70,8 +70,9 @@ namespace VigenereCipher.Services
                 }
             }
 
-            var message = cipher.Select(e => _alphabet[(_alphabet.IndexOf(e) + resultShift) % _alphabet.Length]).ToArray();
-            return new string(message);
+            var message = cipher.Select(e => _alphabet[(_alphabet.IndexOf(e) - resultShift + _alphabet.Length) % _alphabet.Length])
+                .ToArray();
+            return (message: new string(message), shift: resultShift);
         }
     }
 }

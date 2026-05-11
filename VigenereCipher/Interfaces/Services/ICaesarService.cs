@@ -2,6 +2,6 @@
 {
     internal interface ICaesarService
     {
-        public string Hack(string cipher);
+        public (string message, int shift) Hack(string cipher);
     }
 }
