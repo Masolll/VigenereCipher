@@ -8,7 +8,8 @@ namespace VigenereCipher.ViewModels
 {
     public partial class HackingViewModel : ViewModelBase
     {
-        private IKasiskiService _kasiskiService;
+        private IKasiskiService _kasiskiService = new KasiskiService();
+        private TextFormatterService _textFormatterService = new TextFormatterService();
 
         [ObservableProperty]
         private string _message;
@@ -24,7 +25,6 @@ namespace VigenereCipher.ViewModels
         public RelayCommand ActivateDecryptionMode { get; init; }
         public HackingViewModel(Action swapToEncryption, Action activateDecryptionMode)
         {
-            _kasiskiService = new KasiskiService();
             SwapToEncryptionCommand = new RelayCommand(swapToEncryption);
             ActivateDecryptionMode = new RelayCommand(activateDecryptionMode);
         }
@@ -39,7 +39,8 @@ namespace VigenereCipher.ViewModels
 
         private bool CanHacking()
         {
-            return !string.IsNullOrEmpty(_cipher);
+            return !string.IsNullOrEmpty(_cipher)
+                && !string.IsNullOrEmpty(_textFormatterService.ClearText(_cipher));
         }
     }
 }

@@ -9,7 +9,8 @@ namespace VigenereCipher.ViewModels
 {
     public partial class DecryptionViewModel : ViewModelBase
     {
-        private ICipherService _cipherService;
+        private ICipherService _cipherService = new CipherService();
+        private ITextFormatterService _textFormatterService = new TextFormatterService();
 
         [ObservableProperty]
         private string _message;
@@ -27,7 +28,6 @@ namespace VigenereCipher.ViewModels
 
         public DecryptionViewModel(Action swapToEncryption, Action activateHackingMode)
         {
-            _cipherService = new CipherService();
             SwapToEncryptionCommand = new RelayCommand(swapToEncryption);
             ActivateHackingMode = new RelayCommand(activateHackingMode);
         }
@@ -41,7 +41,9 @@ namespace VigenereCipher.ViewModels
         
         private bool CanDecrypt()
         {
-            return !string.IsNullOrEmpty(_cipher) && !string.IsNullOrEmpty(_key);
+            return !string.IsNullOrEmpty(_cipher) && !string.IsNullOrEmpty(_key)
+                && !string.IsNullOrEmpty(_textFormatterService.ClearText(_cipher))
+                && _textFormatterService.ClearText(_key).Length == _key.Length;
         }
     }
 }
