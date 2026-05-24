@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Text;
 using VigenereCipher.Helpers;
 using VigenereCipher.Interfaces.Services;
+using VigenereCipher.Models;
 
 namespace VigenereCipher.Services
 {
@@ -13,10 +14,18 @@ namespace VigenereCipher.Services
         private readonly ICaesarService _caesarService = new CaesarService();
         private readonly ITextFormatterService _textFormatterService = new TextFormatterService();
 
-        public (string message, string key) Hack(string cipher)
+        public bool TryHack(string cipher, out VigenereHackData vigenereHackData)
         {
+            vigenereHackData = new VigenereHackData();
             cipher = _textFormatterService.ClearText(cipher);
-            var keyLength = GetKeyLength(cipher);
+            var keyLength = 0;
+
+            if (!TryGetKeyLength(cipher, out keyLength))
+            {
+                vigenereHackData.ErrorMessage = "Не удалось определить длину ключа. Возможно, текст слишком короткий или не содержит повторяющихся фрагментов.";
+                return false;
+            } 
+
             var encryptedGroupsByKeyLength = new StringBuilder[keyLength];
             var decryptedGroupsByKeyLength = new string[keyLength];
             var keyString = new StringBuilder(keyLength);
@@ -33,10 +42,10 @@ namespace VigenereCipher.Services
             //Расшифровываю каждую группу и нахожу ключ
             for (var i = 0; i < keyLength; i++)
             {
-                var hackData = _caesarService.Hack(encryptedGroupsByKeyLength[i].ToString());
-                decryptedGroupsByKeyLength[i] = hackData.message;
+                var caesarHackData = _caesarService.Hack(encryptedGroupsByKeyLength[i].ToString());
+                decryptedGroupsByKeyLength[i] = caesarHackData.Message;
                 //Сдвиг для текущей группы равен индексу буквы ключа в алфавите
-                keyString.Append(_alphabet[hackData.shift]);
+                keyString.Append(_alphabet[caesarHackData.Shift]);
             }
             //Формирую общее расшифрованное сообщение из всех расшифрованных групп
             for (var i = 0; i < cipher.Length; i++)
@@ -49,11 +58,14 @@ namespace VigenereCipher.Services
             }
             var messageDividedIntoGroups = _textFormatterService.SplitTextIntoGroups(message.ToString(), 5);
 
-            return (message: messageDividedIntoGroups, key: keyString.ToString());
+            vigenereHackData.Message = messageDividedIntoGroups;
+            vigenereHackData.Key = keyString.ToString();
+            return true;
         }
 
-        private int GetKeyLength(string cipher)
+        private bool TryGetKeyLength(string cipher, out int keyLength)
         {
+            keyLength = 0;
             var nGramms = GetNGramms(cipher, 10, 3);
             var nGrammsDistances = GetNGrammsDistances(nGramms);
             var distances = nGrammsDistances.SelectMany(e => e.Value).ToList();
@@ -66,6 +78,11 @@ namespace VigenereCipher.Services
             }
 
             var mostPopularDivisors = divisorsAndFrequence.OrderByDescending(e => e.Value).ThenByDescending(e => e.Key).ToList();
+
+            if (mostPopularDivisors.Count() == 0)
+            {
+                return false;
+            }
             var likelyKeyLength = mostPopularDivisors.First().Key;
             foreach(var e in mostPopularDivisors)
             {
@@ -74,7 +91,9 @@ namespace VigenereCipher.Services
                 if (e.Value >= mostPopularDivisors.First().Value * 0.8 && e.Key > likelyKeyLength)
                     likelyKeyLength = e.Key;
             }
-            return likelyKeyLength;
+
+            keyLength = likelyKeyLength;
+            return true;
         }
 
         private Dictionary<string, List<int>> GetNGrammsDistances(Dictionary<string, List<int>> nGramms)

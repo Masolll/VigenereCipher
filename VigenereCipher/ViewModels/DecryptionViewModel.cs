@@ -9,7 +9,7 @@ namespace VigenereCipher.ViewModels
 {
     public partial class DecryptionViewModel : ViewModelBase
     {
-        private ICipherService _cipherService = new CipherService();
+        private IVigenereService _cipherService = new VigenereService();
         private ITextFormatterService _textFormatterService = new TextFormatterService();
 
         [ObservableProperty]

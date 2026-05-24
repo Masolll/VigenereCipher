@@ -1,6 +1,6 @@
 ﻿namespace VigenereCipher.Interfaces.Services
 {
-    internal interface ICipherService
+    internal interface IVigenereService
     {
         public string Encrypt(string message, string key);
         public string Decrypt(string cipher, string key);

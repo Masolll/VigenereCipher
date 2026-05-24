@@ -34,7 +34,7 @@
 					<TextBlock >Зашифрованный текст</TextBlock>
 				</Border>
 				<Border CornerRadius="5" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Padding="10">
-					<TextBox Text="{Binding Cipher}" TextWrapping="Wrap" PlaceholderText="Здесь будет зашифрованный текст" BorderBrush="Gray" BorderThickness="2"></TextBox>
+					<TextBox Text="{Binding Cipher}" IsReadOnly="True" TextWrapping="Wrap" PlaceholderText="Здесь будет зашифрованный текст" BorderBrush="Gray" BorderThickness="2"></TextBox>
 				</Border>
 			</Grid>
 		</Grid>

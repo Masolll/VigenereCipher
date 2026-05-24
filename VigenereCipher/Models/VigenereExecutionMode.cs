@@ -1,6 +1,6 @@
 ﻿namespace VigenereCipher.Models
 {
-    public enum CipherMode
+    public enum VigenereExecutionMode
     {
         Encrypt,
         Decrypt

@@ -5,22 +5,22 @@ using VigenereCipher.Models;
 
 namespace VigenereCipher.Services
 {
-    internal class CipherService : ICipherService
+    internal class VigenereService : IVigenereService
     {
         private readonly string _alphabet = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
         private ITextFormatterService _textFormatterService = new TextFormatterService();
 
         public string Encrypt(string message, string key)
-            => EncryptOrDecrypt(message, key, CipherMode.Encrypt);
+            => EncryptOrDecrypt(message, key, VigenereExecutionMode.Encrypt);
 
         public string Decrypt(string cipher, string key)
         {
-            var decryptedText = EncryptOrDecrypt(cipher, key, CipherMode.Decrypt);
+            var decryptedText = EncryptOrDecrypt(cipher, key, VigenereExecutionMode.Decrypt);
             return _textFormatterService.SplitTextIntoGroups(decryptedText, 5);
         }
             
 
-        private string EncryptOrDecrypt(string text, string key, CipherMode mode)
+        private string EncryptOrDecrypt(string text, string key, VigenereExecutionMode mode)
         {
             var preparedText = _textFormatterService.ClearText(text);
             var preparedKey = _textFormatterService.ClearText(key);
@@ -35,7 +35,7 @@ namespace VigenereCipher.Services
                 var keyCharacterIndexInAlphabet = _alphabet.IndexOf(keyCharacter);
 
                 var resultTextCharacterIndexInAlphabet = 0;
-                if (mode == CipherMode.Encrypt)
+                if (mode == VigenereExecutionMode.Encrypt)
                 {
                     resultTextCharacterIndexInAlphabet = (textCharacterIndexInAlphabet + keyCharacterIndexInAlphabet) % _alphabet.Length;
                 }

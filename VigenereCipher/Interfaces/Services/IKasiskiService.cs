@@ -1,7 +1,9 @@
-﻿namespace VigenereCipher.Interfaces.Services
+﻿using VigenereCipher.Models;
+
+namespace VigenereCipher.Interfaces.Services
 {
     internal interface IKasiskiService
     {
-        public (string message, string key) Hack(string cipher);
+        public bool TryHack(string cipher, out VigenereHackData vigenereHackData);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace VigenereCipher.Interfaces.Services
+﻿using VigenereCipher.Models;
+
+namespace VigenereCipher.Interfaces.Services
 {
     internal interface ICaesarService
     {
-        public (string message, int shift) Hack(string cipher);
+        public CaesarHackData Hack(string cipher);
     }
 }

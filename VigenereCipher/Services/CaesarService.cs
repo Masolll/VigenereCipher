@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VigenereCipher.Interfaces.Services;
+using VigenereCipher.Models;
 
 namespace VigenereCipher.Services
 {
@@ -46,9 +47,9 @@ namespace VigenereCipher.Services
         };
 
 
-        public (string message, int shift) Hack(string cipher) => LeastSquaresMethod(cipher);
+        public CaesarHackData Hack(string cipher) => LeastSquaresMethod(cipher);
 
-        private (string message, int shift) LeastSquaresMethod(string cipher)
+        private CaesarHackData LeastSquaresMethod(string cipher)
         {
             var minSumSquares = double.MaxValue;
             var resultShift = 0;
@@ -72,7 +73,11 @@ namespace VigenereCipher.Services
 
             var message = cipher.Select(e => _alphabet[(_alphabet.IndexOf(e) - resultShift + _alphabet.Length) % _alphabet.Length])
                 .ToArray();
-            return (message: new string(message), shift: resultShift);
+            return new CaesarHackData
+            {
+                Message = new string(message),
+                Shift = resultShift
+            };
         }
     }
 }

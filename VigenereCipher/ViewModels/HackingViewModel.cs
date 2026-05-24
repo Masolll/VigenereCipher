@@ -21,6 +21,9 @@ namespace VigenereCipher.ViewModels
         [NotifyCanExecuteChangedFor(nameof(RunHackingCommand))]
         private string _cipher;
 
+        [ObservableProperty]
+        private bool _isError;
+
         public RelayCommand SwapToEncryptionCommand { get; init; }
         public RelayCommand ActivateDecryptionMode { get; init; }
         public HackingViewModel(Action swapToEncryption, Action activateDecryptionMode)
@@ -32,9 +35,16 @@ namespace VigenereCipher.ViewModels
         [RelayCommand(CanExecute = nameof(CanHacking))]
         private void RunHacking()
         {
-            var hackData = _kasiskiService.Hack(_cipher);
-            Message = hackData.message;
-            Key = hackData.key;
+            if (!_kasiskiService.TryHack(_cipher, out var vigenereHackData))
+            {
+                Message = vigenereHackData.ErrorMessage;
+                Key = string.Empty;
+                IsError = true;
+                return;
+            }
+            Message = vigenereHackData.Message;
+            Key = vigenereHackData.Key;
+            IsError = false;
         }
 
         private bool CanHacking()
