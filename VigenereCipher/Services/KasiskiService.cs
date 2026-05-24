@@ -16,7 +16,7 @@ namespace VigenereCipher.Services
         public (string message, string key) Hack(string cipher)
         {
             cipher = _textFormatterService.ClearText(cipher);
-            var keyLength = getKeyLength(cipher);
+            var keyLength = GetKeyLength(cipher);
             var encryptedGroupsByKeyLength = new StringBuilder[keyLength];
             var decryptedGroupsByKeyLength = new string[keyLength];
             var keyString = new StringBuilder(keyLength);
@@ -52,10 +52,10 @@ namespace VigenereCipher.Services
             return (message: messageDividedIntoGroups, key: keyString.ToString());
         }
 
-        private int getKeyLength(string cipher)
+        private int GetKeyLength(string cipher)
         {
-            var nGramms = getNGramms(cipher, 10, 3);
-            var nGrammsDistances = getNGrammsDistances(nGramms);
+            var nGramms = GetNGramms(cipher, 10, 3);
+            var nGrammsDistances = GetNGrammsDistances(nGramms);
             var distances = nGrammsDistances.SelectMany(e => e.Value).ToList();
             var divisors = distances.Select(e => MathHelper.GetDivisors(e)).SelectMany(e => e).ToList();
             //словарь<делитель, частота>
@@ -77,7 +77,7 @@ namespace VigenereCipher.Services
             return likelyKeyLength;
         }
 
-        private Dictionary<string, List<int>> getNGrammsDistances(Dictionary<string, List<int>> nGramms)
+        private Dictionary<string, List<int>> GetNGrammsDistances(Dictionary<string, List<int>> nGramms)
         {
             var nGrammsDistances = new Dictionary<string, List<int>>();
             foreach (var e in nGramms)
@@ -104,18 +104,18 @@ namespace VigenereCipher.Services
         }
 
         //нахожу все N-граммы от максимального N до минимального N
-        private Dictionary<string, List<int>> getNGramms(string text, int maxN, int minN)
+        private Dictionary<string, List<int>> GetNGramms(string text, int maxN, int minN)
         {
             var allNGramms = new Dictionary<string, List<int>>();
             for (var n = maxN; n >= minN; n--)
             {
-                var currentNGramms = getNGramms(text, n);
+                var currentNGramms = GetNGramms(text, n);
                 allNGramms = allNGramms.Union(currentNGramms).ToDictionary();
             }
             return allNGramms;
         }
 
-        private Dictionary<string, List<int>> getNGramms(string text, int n)
+        private Dictionary<string, List<int>> GetNGramms(string text, int n)
         {
             var nGramms = new Dictionary<string, List<int>>();
             //Прохожу скользящим окном длиною n

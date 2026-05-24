@@ -32,14 +32,14 @@ namespace VigenereCipher.ViewModels
             ActivateHackingMode = new RelayCommand(activateHackingMode);
         }
 
-        [RelayCommand(CanExecute = nameof(canDecrypt))]
+        [RelayCommand(CanExecute = nameof(CanDecrypt))]
         private void RunDecrypt()
         {
             var decryption = _cipherService.Decrypt(_cipher, _key);
             Message = decryption;
         }
         
-        private bool canDecrypt()
+        private bool CanDecrypt()
         {
             return !string.IsNullOrEmpty(_cipher) && !string.IsNullOrEmpty(_key);
         }

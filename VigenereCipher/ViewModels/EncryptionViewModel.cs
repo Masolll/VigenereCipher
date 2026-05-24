@@ -29,13 +29,13 @@ namespace VigenereCipher.ViewModels
             SwapToDecryptionCommand = new RelayCommand(swapToDecryption);
         }
 
-        [RelayCommand(CanExecute = nameof(canEncrypt))]
+        [RelayCommand(CanExecute = nameof(CanEncrypt))]
         private void RunEncrypt()
         {
             Cipher = _cipherService.Encrypt(_message, _key);
         }
 
-        private bool canEncrypt()
+        private bool CanEncrypt()
         {
             return !string.IsNullOrEmpty(_message) && !string.IsNullOrEmpty(_key);
         }

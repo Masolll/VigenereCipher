@@ -10,25 +10,25 @@
 
         public MainWindowViewModel()
         {
-            _encryptionView = new EncryptionViewModel(swapView);
-            _decryptionView = new DecryptionViewModel(swapView, showHackingView);
-            _hackingView = new HackingViewModel(swapView, showDecryptionView);
+            _encryptionView = new EncryptionViewModel(SwapView);
+            _decryptionView = new DecryptionViewModel(SwapView, ShowHackingView);
+            _hackingView = new HackingViewModel(SwapView, ShowDecryptionView);
             CurrentView = _encryptionView;
         }
 
-        private void swapView()
+        private void SwapView()
         {
             CurrentView = CurrentView is EncryptionViewModel ? _decryptionView : _encryptionView;
             OnPropertyChanged(nameof(CurrentView));
         }
 
-        private void showDecryptionView()
+        private void ShowDecryptionView()
         {
             CurrentView = _decryptionView;
             OnPropertyChanged(nameof(CurrentView));
         }
 
-        private void showHackingView()
+        private void ShowHackingView()
         {
             CurrentView = _hackingView;
             OnPropertyChanged(nameof(CurrentView));

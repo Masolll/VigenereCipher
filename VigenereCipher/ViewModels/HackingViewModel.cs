@@ -29,7 +29,7 @@ namespace VigenereCipher.ViewModels
             ActivateDecryptionMode = new RelayCommand(activateDecryptionMode);
         }
 
-        [RelayCommand(CanExecute = nameof(canHacking))]
+        [RelayCommand(CanExecute = nameof(CanHacking))]
         private void RunHacking()
         {
             var hackData = _kasiskiService.Hack(_cipher);
@@ -37,7 +37,7 @@ namespace VigenereCipher.ViewModels
             Key = hackData.key;
         }
 
-        private bool canHacking()
+        private bool CanHacking()
         {
             return !string.IsNullOrEmpty(_cipher);
         }

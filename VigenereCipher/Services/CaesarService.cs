@@ -46,9 +46,9 @@ namespace VigenereCipher.Services
         };
 
 
-        public (string message, int shift) Hack(string cipher) => leastSquaresMethod(cipher);
+        public (string message, int shift) Hack(string cipher) => LeastSquaresMethod(cipher);
 
-        private (string message, int shift) leastSquaresMethod(string cipher)
+        private (string message, int shift) LeastSquaresMethod(string cipher)
         {
             var minSumSquares = double.MaxValue;
             var resultShift = 0;
