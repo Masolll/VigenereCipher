@@ -6,59 +6,40 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VigenereCipher.ViewModels
 {
-    public class HackingViewModel : ViewModelBase
+    public partial class HackingViewModel : ViewModelBase
     {
         private IKasiskiService _kasiskiService;
 
+        [ObservableProperty]
         private string _message;
 
+        [ObservableProperty]
         private string _key;
-        private string _cipher;
 
-        public string Message
-        {
-            get => _message;
-            set
-            {
-                _message = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Key
-        {
-            get => _key;
-            set
-            {
-                _key = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Cipher
-        {
-            get => _cipher;
-            set
-            {
-                _cipher = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RunHackingCommand))]
+        private string _cipher;
 
         public RelayCommand SwapToEncryptionCommand { get; init; }
         public RelayCommand ActivateDecryptionMode { get; init; }
-        public RelayCommand RunHackingCommand { get; init; }
         public HackingViewModel(Action swapToEncryption, Action activateDecryptionMode)
         {
             _kasiskiService = new KasiskiService();
             SwapToEncryptionCommand = new RelayCommand(swapToEncryption);
             ActivateDecryptionMode = new RelayCommand(activateDecryptionMode);
-            RunHackingCommand = new RelayCommand(runHacking);
         }
 
-        private void runHacking()
+        [RelayCommand(CanExecute = nameof(canHacking))]
+        private void RunHacking()
         {
             var hackData = _kasiskiService.Hack(_cipher);
             Message = hackData.message;
             Key = hackData.key;
+        }
+
+        private bool canHacking()
+        {
+            return !string.IsNullOrEmpty(_cipher);
         }
     }
 }
