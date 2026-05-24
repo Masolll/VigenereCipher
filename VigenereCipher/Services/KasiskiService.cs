@@ -2,18 +2,20 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using VigenereCipher.Helpers;
 using VigenereCipher.Interfaces.Services;
 
 namespace VigenereCipher.Services
 {
     internal class KasiskiService : IKasiskiService
     {
-        private readonly ICaesarService _caesarService = new CaesarService();
         private readonly string _alphabet = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+        private readonly ICaesarService _caesarService = new CaesarService();
+        private readonly ITextFormatterService _textFormatterService = new TextFormatterService();
 
         public (string message, string key) Hack(string cipher)
         {
-            cipher = cipher.ToLower();
+            cipher = _textFormatterService.ClearText(cipher);
             var keyLength = getKeyLength(cipher);
             var encryptedGroupsByKeyLength = new StringBuilder[keyLength];
             var decryptedGroupsByKeyLength = new string[keyLength];
@@ -42,10 +44,12 @@ namespace VigenereCipher.Services
                 var groupIndex = i % keyLength;
                 var itemIndexInGroup = i / keyLength;
                 var messageChar = decryptedGroupsByKeyLength[groupIndex][itemIndexInGroup];
+
                 message.Append(messageChar);
             }
+            var messageDividedIntoGroups = _textFormatterService.SplitTextIntoGroups(message.ToString(), 5);
 
-            return (message: message.ToString(), key: keyString.ToString());
+            return (message: messageDividedIntoGroups, key: keyString.ToString());
         }
 
         private int getKeyLength(string cipher)
@@ -53,7 +57,7 @@ namespace VigenereCipher.Services
             var nGramms = getNGramms(cipher, 10, 3);
             var nGrammsDistances = getNGrammsDistances(nGramms);
             var distances = nGrammsDistances.SelectMany(e => e.Value).ToList();
-            var divisors = distances.Select(e => getDivisors(e)).SelectMany(e => e).ToList();
+            var divisors = distances.Select(e => MathHelper.GetDivisors(e)).SelectMany(e => e).ToList();
             //словарь<делитель, частота>
             var divisorsAndFrequence = new Dictionary<int, int>();
             foreach(var e in divisors)
@@ -126,23 +130,6 @@ namespace VigenereCipher.Services
             //Оставляю n-граммы которые встречаются более чем 1 раз
             nGramms = nGramms.Where(e => e.Value.Count > 1).ToDictionary<string, List<int>>();
             return nGramms;
-        }
-
-        private List<int> getDivisors(int number)
-        {
-            var divisors = new List<int>();
-            for (var divisor = 2; divisor * divisor <= number; divisor++)
-            {
-                if (number % divisor == 0)
-                {
-                    divisors.Add(divisor);
-                    if (divisor * divisor != number)
-                    {
-                        divisors.Add(number / divisor);
-                    }
-                }
-            }
-            return divisors;
         }
     }
 }

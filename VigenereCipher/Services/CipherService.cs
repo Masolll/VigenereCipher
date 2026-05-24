@@ -8,17 +8,22 @@ namespace VigenereCipher.Services
     internal class CipherService : ICipherService
     {
         private readonly string _alphabet = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+        private ITextFormatterService _textFormatterService = new TextFormatterService();
 
         public string Encrypt(string message, string key)
             => EncryptOrDecrypt(message, key, CipherMode.Encrypt);
 
         public string Decrypt(string cipher, string key)
-            => EncryptOrDecrypt(cipher, key, CipherMode.Decrypt);
+        {
+            var decryptedText = EncryptOrDecrypt(cipher, key, CipherMode.Decrypt);
+            return _textFormatterService.SplitTextIntoGroups(decryptedText, 5);
+        }
+            
 
         private string EncryptOrDecrypt(string text, string key, CipherMode mode)
         {
-            var preparedText = prepareTextBeforeEncrypt(text);
-            var preparedKey = prepareTextBeforeEncrypt(key);
+            var preparedText = _textFormatterService.ClearText(text);
+            var preparedKey = _textFormatterService.ClearText(key);
 
             var resultText = new StringBuilder();
             for (var i = 0; i < preparedText.Length; i++)
@@ -41,16 +46,8 @@ namespace VigenereCipher.Services
                 var resultTextCharacter = _alphabet[resultTextCharacterIndexInAlphabet];
                 resultText.Append(resultTextCharacter);
             }
+            
             return resultText.ToString();
-        }
-
-        private string prepareTextBeforeEncrypt(string message)
-        {
-            var a = new string(message.Replace('ё', 'е')
-            .ToLower()
-            .Where(e => _alphabet.Contains(e))
-            .ToArray());
-            return a;
         }
     }
 }

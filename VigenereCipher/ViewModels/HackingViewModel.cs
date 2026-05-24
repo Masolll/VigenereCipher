@@ -2,13 +2,16 @@
 using System;
 using VigenereCipher.Interfaces.Services;
 using VigenereCipher.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VigenereCipher.ViewModels
 {
     public class HackingViewModel : ViewModelBase
     {
         private IKasiskiService _kasiskiService;
+
         private string _message;
+
         private string _key;
         private string _cipher;
 
