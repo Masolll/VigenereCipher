@@ -11,7 +11,11 @@ namespace VigenereCipher.Services
         private ITextFormatterService _textFormatterService = new TextFormatterService();
 
         public string Encrypt(string message, string key)
-            => EncryptOrDecrypt(message, key, VigenereExecutionMode.Encrypt);
+        {
+            var encryptedText = EncryptOrDecrypt(message, key, VigenereExecutionMode.Encrypt);
+            return _textFormatterService.SplitTextIntoGroups(encryptedText, 5);
+        }
+        
 
         public string Decrypt(string cipher, string key)
         {
@@ -46,7 +50,7 @@ namespace VigenereCipher.Services
                 var resultTextCharacter = _alphabet[resultTextCharacterIndexInAlphabet];
                 resultText.Append(resultTextCharacter);
             }
-            
+
             return resultText.ToString();
         }
     }
